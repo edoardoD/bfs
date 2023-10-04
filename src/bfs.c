@@ -183,29 +183,29 @@ int bfs(const Graph *g, int s, int *d, int *p)
     while (!list_is_empty(Q))
     {
         v = list_remove_last(Q);
-        e = graph_adj(g, v);
-
-        while (e != NULL)
+        if (color[v] == WHITE)
         {
-            u = e->dst;
-            if (color[u] == WHITE)
-            {
-                color[u] = GREY;
-                p[u] = v;
-                d[u] = d[v] + 1;
-                list_add_first(Q, u);
-                list_print(Q);
-            }
-            e = e->next;
-        }
-        counter++;
+            color[v] = BLACK;
+            e = graph_adj(g, v);
 
-        color[v] = BLACK;
+            while (e != NULL)
+            {
+                u = e->dst;
+                if (color[u] == WHITE)
+                {
+                    p[u] = v;
+                    d[u] = d[v] + 1;
+                    list_add_first(Q, u);
+                }
+                e = e->next;
+            }
+            counter++;
+            
+        }
     }
     free(color);
     list_destroy(Q);
 
-    graph_print(g);
     return counter;
 }
 
